@@ -18,17 +18,17 @@ public class MyInvestigator implements Investigator {
 
     @Override
     public int getTotalNumberOfMethods() {
-        return m_aClass.getMethods().length;
+        return m_aClass.getDeclaredMethods().length;
     }
 
     @Override
     public int getTotalNumberOfConstructors() {
-        return m_aClass.getConstructors().length;
+        return m_aClass.getDeclaredConstructors().length;
     }
 
     @Override
     public int getTotalNumberOfFields() {
-        return m_aClass.getFields().length;
+        return m_aClass.getDeclaredFields().length;
     }
 
     @Override
@@ -56,14 +56,14 @@ public class MyInvestigator implements Investigator {
 
     @Override
     public int getCountOfStaticMethods() {
-        Field[] allFiledsOfMyInstance = m_aClass.getDeclaredFields();
-        int counterOfStaticFields = 0;
-        for (Field currField : allFiledsOfMyInstance){
-            if (Modifier.isStatic(currField.getModifiers())) {
-                counterOfStaticFields++;
+        Method[] allDeclaredMethods = m_aClass.getDeclaredMethods();
+        int counterOfStaticMethods = 0;
+        for (Method currMethod : allDeclaredMethods){
+            if (Modifier.isStatic(currMethod.getModifiers())) {
+                counterOfStaticMethods++;
             }
         }
-        return counterOfStaticFields;
+        return counterOfStaticMethods;
     }
 
     @Override
@@ -96,16 +96,16 @@ public class MyInvestigator implements Investigator {
 
     @Override
     public Set<String> getNamesOfAllFieldsIncludingInheritanceChain() {
-        Field[] myClassFields = m_aClass.getDeclaredFields();
+        Field[] myClassFields;
         Class currClassInInheritenceChain = m_aClass;
         Set<String> fieldsNameSet = new HashSet<>();
         while (currClassInInheritenceChain  != null)
         {
+            myClassFields = currClassInInheritenceChain.getDeclaredFields();
             for (Field someField : myClassFields) {
                 fieldsNameSet.add(someField.getName());
             }
             currClassInInheritenceChain = currClassInInheritenceChain.getSuperclass();
-            myClassFields = currClassInInheritenceChain.getDeclaredFields();
         }
         return fieldsNameSet;
     }
